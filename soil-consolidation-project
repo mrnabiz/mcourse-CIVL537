@@ -1,0 +1,217 @@
+program mullayconsolidation
+implicit none
+
+real typ, b, l, r, p, q, Sigi, Delsig, Sigf ,gac ,gas ,gaw, sigs ! Surcharge parameters
+real cc, ht, zo, ei, de, m
+Integer n !Consolidation parameters
+real he, pi !Calculated parameters
+Integer z !
+	PRINT *, 'Class Number : 22'
+    PRINT *, '		 In this program we attempt to show you the'
+    PRINT *, '		 accuracy of multi-layering system for calculation'
+    PRINT *, '		 of total consolidation in a clay layer witch its'
+    PRINT *, '		 height is respectively high. so be with us and try !' 
+    PRINT *, '		 Note : stress Method is 1to2 inclination'!Programs declaration
+	print *, '------------------------------------------------------------'
+    print *, '		 Please input the saturated unit weight of clay and sand layer :'
+    read *, gac , gas
+    print *, '		 Please input the  unit weight of water :'
+    read *, gaw
+    print *, '		 Please input the  consolidation coefficient, total height'
+    print *, '		 initial erossion and depth of clay head :'
+    read *, cc, ht, ei, zo
+    print *, '		 So to how many layers do you want to divide the clay layer ?:'
+    read *, n
+    
+    he=(ht/(2*n))
+	sigs=zo*(gas-gaw)
+    pi=asin(1.0)*2.0
+    print *, '------------------------------------------------------------'
+    print *, '		 Please select the type of surgarche :'
+    print *, '		 1) Point load'
+    print *, '		 2) Liner load'
+    print *, '		 3) Strip load'
+    print *, '		 4) Circular load'
+    print *, '		 5) Rectangular load'
+    read *, typ
+!Part 1 ---------------------------------------------------------------------------------------------------------
+  			IF ( typ>5 .or. typ<0 ) THEN
+    print *, '		 You input the wrong number of type load, Again please :'
+    read *, typ
+			END IF
+    print *, '------------------------------------------------------------'        
+  			IF ( typ==1 ) THEN
+    print *, '		 You selected your load type as : Point load'
+	print *, '		 We need the amount of your point load in kN :'
+    read *, p
+    print *, '------------------------------------------------------------'
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=(4*p)/(pi*((zo+he*m)**2))
+				sigf=sigi+delsig
+				de=1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))
+	print *, '		 Amount of deflection in layer number :',z 
+	print *, '		 will be :(mm) ' ,de
+    print *, '***--------------------------------------------------***'
+    			de=0
+                End DO
+               
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=(4*p)/(pi*((zo+he*m)**2))
+				sigf=sigi+delsig
+				de=de+1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))	
+				END DO
+    print *, '--------------------------------------------------------------'
+    print *, '		 All amount of deflection in clay layer will be :(mm)',de
+			END IF
+!Part 2 ---------------------------------------------------------------------------------------------------------           
+     			IF ( typ==2 ) THEN
+    print *, '		 You selected your load type as : Liner load'
+	print *, '		 We need the amount of your Liner load in kN/m :'
+    read *, q
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=((q)/(zo+he*m))
+				sigf=sigi+delsig
+				de=1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))
+	print *, '		 Amount of deflection in layer number :',z 
+	print *, '		 will be :(mm) ' ,de
+    print *, '***--------------------------------------------------***'
+    			de=0
+                End DO
+               
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=((q)/(zo+he*m))
+				sigf=sigi+delsig
+				de=de+1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))	
+				END DO
+    print *, '---------------------------------------------------------'
+    print *, '		 All amount of deflection in layer will be :(mm)',de
+			END IF
+!Part 3 ---------------------------------------------------------------------------------------------------------            
+       			IF ( typ==3 ) THEN
+    print *, '		 You selected your load type as : Strip load'
+	print *, '		 We need the amount of your Strip load in kN/m^2 :'
+    read *, q
+    print *, '		 And also the surcharge width :'
+    read *, b
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=((q*b)/(b+(zo+he*m)))
+				sigf=sigi+delsig
+				de=1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))
+	print *, '		 Amount of deflection in layer number :',z 
+	print *, '		 will be :(mm) ' ,de
+    print *, '***--------------------------------------------------***'
+    			de=0
+                End DO
+               
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=((q*b)/(b+(zo+he*m)))
+				sigf=sigi+delsig
+				de=de+1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))	
+				END DO
+    print *, '---------------------------------------------------------'
+    print *, '		 All amount of deflection in layer will be :(mm)',de
+			END IF
+!Part 4 --------------------------------------------------------------------------------------------------------- 
+          IF ( typ==4 ) THEN
+    print *, '		 You selected your load type as : Circular load'
+	print *, '		 We need the amount of your Circular load in kN/m^2 :'
+    read *, q
+    print *, '		 And also the surcharge radios :'
+    read *, r
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=(q*(r**2))/((r+((zo+he*m)/2))**2)
+				sigf=sigi+delsig
+				de=1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))
+	print *, '		 Amount of deflection in layer number :',z 
+	print *, '		 will be :(mm) ' ,de
+    print *, '***--------------------------------------------------***'
+    			de=0
+                End DO
+               
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=(q*(r**2))/((r+((zo+he*m)/2))**2)
+				sigf=sigi+delsig
+				de=de+1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))	
+				END DO
+    print *, '---------------------------------------------------------'
+    print *, '		 All amount of deflection in layer will be :(mm)',de
+			END IF
+!Part 4 ---------------------------------------------------------------------------------------------------------
+                      IF ( typ==5 ) THEN
+    print *, '		 You selected your load type as : Rectangular load'
+	print *, '		 We need the amount of your Rectangular load in kN/m^2 :'
+    read *, q
+    print *, '		 And also the surcharge width and lenght :'
+    read *, b,l
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=(q*l*b)/((b+(zo+he*m))*(l+(zo+he*m)))
+				sigf=sigi+delsig
+				de=1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))
+	print *, '		 Amount of deflection in layer number :',z 
+	print *, '		 will be :(mm) ' ,de
+    print *, '***--------------------------------------------------***'
+    			de=0
+                End DO
+               
+				DO z=1,n
+                sigi=0
+                sigf=0
+                delsig=0
+                m=(2*z)-1
+                sigi=sigs+he*(m)*(gac-gaw)
+                delsig=(q*l*b)/((b+(zo+he*m))*(l+(zo+he*m)))
+				sigf=sigi+delsig
+				de=de+1000*((cc*he*2)/(1+ei))*(log(sigf/sigi))	
+				END DO
+    print *, '---------------------------------------------------------'
+    print *, '		 All amount of deflection in layer will be :(mm)',de
+    
+			END IF
+     print *, '********************The End******************************'
+    print *, '		 	Dveloped By : M. Reza Nabizadeh  Num: 22'          
+ end program mullayconsolidation
